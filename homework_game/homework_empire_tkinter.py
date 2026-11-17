@@ -8,6 +8,7 @@ class HomeworkGame:
         self.root.title("Homework Game")
         self.root.geometry("850x600")
 
+        #starting variables that hold the funds, reputation, and value of each correct answer.
         self.funds = 0.0
         self.reputation = 0
         self.answer_value = 5
@@ -17,6 +18,7 @@ class HomeworkGame:
         self.update_game()
 
     def build_ui(self):
+        #Game title
         tk.Label(self.root, text="Homework Game", font=("Arial", 24, "bold")).pack(pady=10)
 
         stats = tk.Frame(self.root)
@@ -31,7 +33,7 @@ class HomeworkGame:
         self.rep_label = tk.Label(stats, text="", font=("Arial", 14))
         self.rep_label.grid(row=0, column=2, padx=15)
 
-        #
+        #Manual homework section
         manual = tk.LabelFrame(self.root, text="Manual Homework", padx=15, pady=10)
         manual.pack(fill="x", padx=20, pady=10)
 
@@ -44,24 +46,25 @@ class HomeworkGame:
         self.answer_entry = tk.Entry(answer_row, font=("Arial", 16), width=10)
         self.answer_entry.pack(side="left", padx=5)
 
+        #Answer Button
         tk.Button(answer_row, text="Submit Answer", command=self.submit_answer, font=("Arial", 12)).pack(side="left")
 
         self.message_label = tk.Label(manual, text="", font=("Arial", 11))
         self.message_label.pack()
 
-    def generate_question(self):
+    def generate_question(self): #Question generation: Definitly wanna add more question
         self.a = random.randint(1, 10)
         self.b = random.randint(1, 10)
         self.correct_answer = self.a + self.b
 
-    def submit_answer(self):
+    def submit_answer(self): #Answer submission and validation
         try:
             answer = int(self.answer_entry.get())
         except ValueError:
             self.message_label.config(text="Enter a number.")
             return
 
-        if answer == self.correct_answer:
+        if answer == self.correct_answer: #adds funds and reputation if correct, subtracts reputation if incorrect
             self.funds += self.answer_value
             self.reputation += 1
             self.message_label.config(text=f"Correct! +${self.answer_value} and +1 reputation.")
@@ -72,7 +75,7 @@ class HomeworkGame:
         self.answer_entry.delete(0, tk.END)
         self.generate_question()
 
-    def update_game(self):
+    def update_game(self): #Game state update and UI refresh
         self.funds_label.config(text=f"Funds: ${self.funds:,.0f}")
         self.rep_label.config(text=f"Reputation: {self.reputation}")
 
@@ -81,7 +84,7 @@ class HomeworkGame:
         )
         self.root.after(1000, self.update_game)
 
-    def close_game(self):
+    def close_game(self): #closes game
         self.root.destroy()
 
 root = tk.Tk()
